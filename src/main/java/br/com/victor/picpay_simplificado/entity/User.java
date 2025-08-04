@@ -2,10 +2,7 @@ package br.com.victor.picpay_simplificado.entity;
 
 import br.com.victor.picpay_simplificado.enums.UserType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -36,5 +33,13 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserType type;
+
+    public User(String fullName, String cpf, String email, String password, UserType type) {
+        this.fullName = fullName;
+        this.cpf = cpf;
+        this.email = email;
+        this.password = password;
+        this.type = type;
+    }
 
 }
