@@ -1,0 +1,25 @@
+meta {
+  name: Create User
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "fullName": "Victor Henrique Barbosa Luiz",
+    "cpf": "49349826801",
+    "email": "victorhenriquebl11@gmail.com",
+    "password": "Rumoaodev123*",
+    "type": "COMMON"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
