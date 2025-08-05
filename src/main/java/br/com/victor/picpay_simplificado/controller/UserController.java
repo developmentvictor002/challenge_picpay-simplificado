@@ -4,13 +4,11 @@ import br.com.victor.picpay_simplificado.dto.UserRequestDto;
 import br.com.victor.picpay_simplificado.dto.UserResponseDto;
 import br.com.victor.picpay_simplificado.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -31,5 +29,11 @@ public class UserController {
                 .buildAndExpand(responseDto.userId())
                 .toUri();
         return ResponseEntity.created(location).body(responseDto);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") UUID userId) {
+        UserResponseDto responseDto = userService.getUserById(userId);
+        return ResponseEntity.ok(responseDto);
     }
 }
