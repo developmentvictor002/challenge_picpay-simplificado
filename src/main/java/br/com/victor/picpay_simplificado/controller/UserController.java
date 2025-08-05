@@ -1,4 +1,4 @@
-package br.com.victor.picpay_simplificado;
+package br.com.victor.picpay_simplificado.controller;
 
 import br.com.victor.picpay_simplificado.dto.UserRequestDto;
 import br.com.victor.picpay_simplificado.dto.UserResponseDto;
