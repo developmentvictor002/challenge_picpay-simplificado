@@ -36,4 +36,10 @@ public class UserController {
         UserResponseDto responseDto = userService.getUserById(userId);
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<UserResponseDto> getUserByEmail(@RequestParam String email) {
+        UserResponseDto responseDto = userService.getUserByEmail(email);
+        return ResponseEntity.ok(responseDto);
+    }
 }

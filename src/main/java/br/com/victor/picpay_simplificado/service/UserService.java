@@ -30,4 +30,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
         return UserResponseDto.fromUser(user);
     }
+
+    public UserResponseDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " not found."));
+        return UserResponseDto.fromUser(user);
+    }
 }
