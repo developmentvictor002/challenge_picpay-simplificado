@@ -3,8 +3,12 @@ package br.com.victor.picpay_simplificado.service;
 import br.com.victor.picpay_simplificado.dto.UserRequestDto;
 import br.com.victor.picpay_simplificado.dto.UserResponseDto;
 import br.com.victor.picpay_simplificado.entity.User;
+import br.com.victor.picpay_simplificado.exception.UserNotFoundException;
 import br.com.victor.picpay_simplificado.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -19,5 +23,11 @@ public class UserService {
         User userToSave = dto.toUser();
         User savedUser = userRepository.save(userToSave);
         return UserResponseDto.fromUser(savedUser);
+    }
+
+    public UserResponseDto getUserById(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+        return UserResponseDto.fromUser(user);
     }
 }
