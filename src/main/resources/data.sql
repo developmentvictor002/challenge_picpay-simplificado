@@ -1,4 +1,4 @@
-INSERT INTO tb_users (user_id, cpf, email, name, password, type) VALUES
+INSERT IGNORE INTO tb_users (user_id, cpf, email, name, password, type) VALUES
   (UNHEX(REPLACE(UUID(), '-', '')), '12345678901', 'alice.silva@example.com', 'Alice Silva', 'senha123hashed', 'common'),
   (UNHEX(REPLACE(UUID(), '-', '')), '23456789012', 'bob.souza@example.com', 'Bob Souza', 'senha456hashed', 'merchant'),
   (UNHEX(REPLACE(UUID(), '-', '')), '34567890123', 'carol.lima@example.com', 'Carol Lima', 'senha789hashed', 'common'),
