@@ -1,16 +1,15 @@
 package br.com.victor.picpay_simplificado.controller;
 
+import br.com.victor.picpay_simplificado.dto.DepositRequestDto;
 import br.com.victor.picpay_simplificado.dto.WalletRequestDto;
 import br.com.victor.picpay_simplificado.dto.WalletResponseDto;
 import br.com.victor.picpay_simplificado.service.WalletService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/wallets")
@@ -31,5 +30,12 @@ public class WalletController {
                 .buildAndExpand(responseDto.walletId())
                 .toUri();
         return ResponseEntity.created(location).body(responseDto);
+    }
+
+    @PutMapping("/{walletId}/deposit")
+    public ResponseEntity<WalletResponseDto> deposit(@PathVariable("walletId") UUID walletId,
+                                                     @RequestBody DepositRequestDto dto) {
+        WalletResponseDto responseDto = walletService.deposit(walletId, dto);
+        return ResponseEntity.ok(responseDto);
     }
 }
