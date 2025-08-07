@@ -23,7 +23,7 @@ public class Wallet {
     private UUID walletId;
 
     @Column(name = "balance")
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
