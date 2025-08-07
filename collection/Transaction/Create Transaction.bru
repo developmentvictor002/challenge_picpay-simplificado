@@ -1,0 +1,23 @@
+meta {
+  name: Create Transaction
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/transactions/transfer
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "senderWalletId": "d41b9dff-4370-435a-b0ce-d892cf1db4dd",
+    "receiverWalletId": "d41b9dff-4370-435a-b0ce-d892cf1db4dd",
+    "value": 1250.0
+  }
+}
+
+settings {
+  encodeUrl: true
+}

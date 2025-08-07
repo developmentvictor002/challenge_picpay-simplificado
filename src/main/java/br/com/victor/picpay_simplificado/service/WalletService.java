@@ -6,6 +6,8 @@ import br.com.victor.picpay_simplificado.dto.WalletRequestDto;
 import br.com.victor.picpay_simplificado.dto.WalletResponseDto;
 import br.com.victor.picpay_simplificado.entity.User;
 import br.com.victor.picpay_simplificado.entity.Wallet;
+import br.com.victor.picpay_simplificado.exception.InsufficientBalanceException;
+import br.com.victor.picpay_simplificado.exception.InvalidDepositAmountException;
 import br.com.victor.picpay_simplificado.exception.WalletNotFoundException;
 import br.com.victor.picpay_simplificado.repository.WalletRepository;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,19 @@ public class WalletService {
         return toWalletResponseDto(wallet);
     }
 
-    private Wallet getWalletEntityById(UUID walletId) {
+    public void transferAmount(Wallet sender, Wallet receiver, BigDecimal value) {
+        if(sender.getBalance().compareTo(value) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+
+        sender.setBalance(sender.getBalance().subtract(value));
+        receiver.setBalance(receiver.getBalance().add(value));
+
+        walletRepository.save(sender);
+        walletRepository.save(receiver);
+    }
+
+    protected Wallet getWalletEntityById(UUID walletId) {
         return walletRepository.findById(walletId)
                 .orElseThrow(() -> new WalletNotFoundException("Wallet not found: " + walletId));
     }
@@ -59,12 +73,12 @@ public class WalletService {
         Wallet wallet = getWalletEntityById(walletId);
 
         if (requestDto.amount() == null || requestDto.amount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be positive.");
+            throw new InvalidDepositAmountException("Deposit amount must be positive.");
         }
         return wallet;
     }
 
-    private WalletResponseDto toWalletResponseDto(Wallet wallet) {
+    protected WalletResponseDto toWalletResponseDto(Wallet wallet) {
         User holder = wallet.getHolder();
         UserSummaryDto holderDto = new UserSummaryDto(
                 holder.getUserId(), holder.getFullName(), holder.getEmail()
