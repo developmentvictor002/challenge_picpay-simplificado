@@ -33,15 +33,7 @@ public class WalletService {
 
         Wallet savedWallet = walletRepository.save(wallet);
 
-        UserSummaryDto holderDto = new UserSummaryDto(
-                user.getUserId(), user.getFullName(), user.getEmail()
-        );
-
-        return new WalletResponseDto(
-                savedWallet.getWalletId(),
-                savedWallet.getBalance(),
-                holderDto
-        );
+        return toWalletResponseDto(savedWallet);
     }
 
     public WalletResponseDto deposit(UUID walletId, DepositRequestDto requestDto) {
@@ -50,24 +42,38 @@ public class WalletService {
         wallet.setBalance(wallet.getBalance().add(requestDto.amount()));
         walletRepository.save(wallet);
 
-        User holder = wallet.getHolder();
-        UserSummaryDto holderDto = new UserSummaryDto(
-                holder.getUserId(), holder.getFullName(), holder.getEmail()
-        );
-        return new WalletResponseDto(
-          wallet.getWalletId(),
-                wallet.getBalance(),
-                holderDto
-        );
+        return toWalletResponseDto(wallet);
+    }
+
+    public WalletResponseDto getWalletById(UUID walletId) {
+        Wallet wallet = getWalletEntityById(walletId);
+        return toWalletResponseDto(wallet);
+    }
+
+    private Wallet getWalletEntityById(UUID walletId) {
+        return walletRepository.findById(walletId)
+                .orElseThrow(() -> new WalletNotFoundException("Wallet not found: " + walletId));
     }
 
     private Wallet getWalletWithValidations(UUID walletId, DepositRequestDto requestDto) {
-        Wallet wallet = walletRepository.findById(walletId)
-                .orElseThrow(() -> new WalletNotFoundException("Wallet not found: " + walletId));
+        Wallet wallet = getWalletEntityById(walletId);
 
         if (requestDto.amount() == null || requestDto.amount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Deposit amount must be positive.");
         }
         return wallet;
     }
+
+    private WalletResponseDto toWalletResponseDto(Wallet wallet) {
+        User holder = wallet.getHolder();
+        UserSummaryDto holderDto = new UserSummaryDto(
+                holder.getUserId(), holder.getFullName(), holder.getEmail()
+        );
+        return new WalletResponseDto(
+                wallet.getWalletId(),
+                wallet.getBalance(),
+                holderDto
+        );
+    }
+
 }

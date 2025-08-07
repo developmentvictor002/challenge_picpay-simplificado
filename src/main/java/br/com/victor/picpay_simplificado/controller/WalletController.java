@@ -38,4 +38,10 @@ public class WalletController {
         WalletResponseDto responseDto = walletService.deposit(walletId, dto);
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/{walletId}")
+    public ResponseEntity<WalletResponseDto> getWalletById(@PathVariable("walletId") UUID walletId) {
+        WalletResponseDto responseDto = walletService.getWalletById(walletId);
+        return ResponseEntity.ok(responseDto);
+    }
 }
