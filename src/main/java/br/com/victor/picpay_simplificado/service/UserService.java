@@ -7,7 +7,6 @@ import br.com.victor.picpay_simplificado.exception.UserNotFoundException;
 import br.com.victor.picpay_simplificado.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

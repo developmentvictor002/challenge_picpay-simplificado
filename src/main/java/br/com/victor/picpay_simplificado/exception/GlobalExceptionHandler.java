@@ -1,6 +1,5 @@
 package br.com.victor.picpay_simplificado.exception;
 
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -39,18 +38,23 @@ public class GlobalExceptionHandler {
             problemDetail.setInstance(instanceUri);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
         }
-
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler({EmailAlreadyExistsException.class, CpfAlreadyExistsException.class})
-    public ResponseEntity<String> handleConflict(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    public ResponseEntity<ProblemDetail> handleConflict(RuntimeException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problemDetail.setTitle("Conflict: Resource Already Exists");
+        problemDetail.setDetail(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
     }
 
     @ExceptionHandler(InvalidUserTypeException.class)
-    public ResponseEntity<String> handleBadRequest(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<ProblemDetail> handleBadRequest(RuntimeException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setTitle("Invalid User type");
+        problemDetail.setDetail(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 
     @ExceptionHandler(Exception.class)
