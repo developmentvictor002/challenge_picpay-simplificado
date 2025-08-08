@@ -10,8 +10,8 @@ import br.com.victor.picpay_simplificado.exception.InvalidTransferException;
 import br.com.victor.picpay_simplificado.exception.MerchantCannotTransferException;
 import br.com.victor.picpay_simplificado.exception.UnauthorizedTransferException;
 import br.com.victor.picpay_simplificado.repository.TransactionRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionService {
